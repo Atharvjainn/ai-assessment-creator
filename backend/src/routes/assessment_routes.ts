@@ -1,5 +1,6 @@
 import express from 'express'
 import { Assignment } from '../models/assessment_models.js';
+import { createAssessment } from '../controllers/assessment.js';
 
 const router = express.Router();
 
@@ -10,13 +11,8 @@ router.get('/check',(req,res) => {
     })
 })
 
-router.post("/create-assessment",async(req,res) => {
-    const response = await Assignment.create(req.body);
-
-    return res.json({
-        'test' : "success",
-         data : response
-    })
-})
+router.post("/create-assessment",createAssessment)
 
 export default router
+
+//we need to make middleware as well

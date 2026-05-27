@@ -1,0 +1,125 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { GEMINI_API_KEY } from "../config/env.js";
+import type { QuestionType,GeneratedQuestion,Section,GeneratedPaper } from "./types.js";
+import { Assignment } from "../models/assessment_models.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
+
+// --- Prompt Builder ---
+const buildPrompt = (questionTypes: QuestionType[]): string => {
+  const sectionInstructions = questionTypes
+    .map((qt, i) => {
+      const label = String.fromCharCode(65 + i);
+      return `Section ${label} - ${qt.type}: Generate exactly ${qt.numberOfQuestions} questions, each carrying ${qt.marks} mark(s).`;
+    })
+    .join("\n");
+
+  return `
+You are an expert teacher. Based on the uploaded study material, generate a structured question paper.
+
+INSTRUCTIONS:
+${sectionInstructions}
+
+RULES:
+- Each question must have difficulty: "easy", "medium", or "hard"
+- Mix difficulties within each section
+- Every question must have a clean answer
+- Respond ONLY with valid JSON, no extra text, no markdown fences
+
+JSON structure:
+{
+  "sections": [
+    {
+      "label": "A",
+      "title": "Short Answer Questions",
+      "instruction": "Attempt all questions. Each question carries 2 marks",
+      "questions": [
+        {
+          "text": "...",
+          "difficulty": "easy",
+          "marks": 2,
+          "answer": "..."
+        }
+      ]
+    }
+  ],
+}
+`;
+};
+
+// --- Main ---
+export const generate = async (assignmentId : string) => {
+  const assignment = await Assignment.findById(assignmentId);
+  const questionTypes = assignment?.questionTypes ?? []
+  const totalQuestions = questionTypes.reduce((sum, qt) => sum + qt.numberOfQuestions, 0);
+  const totalMarks = questionTypes.reduce((sum, qt) => sum + qt.numberOfQuestions * qt.marks, 0);
+  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+
+  // load PDF — put any PDF at test/sample.pdf
+  const pdfPath = path.join(__dirname, "sample.pdf");
+  const pdfBuffer = fs.readFileSync(pdfPath);
+  const base64PDF = pdfBuffer.toString("base64");
+
+  const prompt = buildPrompt(questionTypes);
+
+  console.log("Generating question paper...\n");
+
+  const result = await model.generateContent([
+    {
+      inlineData: {
+        mimeType: "application/pdf",
+        data: base64PDF,
+      },
+    },
+    { text: prompt },
+  ]);
+
+  const rawText = result.response.text();
+
+  // parse
+  let paper: GeneratedPaper;
+  try {
+    const clean = rawText.replace(/```json|```/g, "").trim();
+    paper = JSON.parse(clean);
+  } catch (err) {
+    await Assignment.findByIdAndUpdate(assignmentId, { status: "failed" });
+    throw new Error(`Failed to parse Gemini response: ${rawText}`);
+  }
+
+
+  await Assignment.findByIdAndUpdate(assignmentId, {
+    status: "completed",
+    totalQuestions: totalQuestions,
+    totalMarks: totalMarks,
+    generatedPaper: {
+      sections: paper.sections.map((section) => ({
+        label: section.label,
+        title: section.title,
+        instruction: section.instruction,
+        questions: section.questions.map((q) => ({
+          text: q.text,
+          difficulty: q.difficulty,
+          marks: q.marks,
+          answer: q.answer,
+        })),
+      })),
+    },
+  });
+
+  // also dump raw JSON if you want to inspect
+  fs.writeFileSync(
+    path.join(__dirname, "output.json"),
+    JSON.stringify(paper, null, 2)
+  );
+  console.log("Raw JSON saved to test/output.json");
+};
+
+// generate(assignmentId).catch(console.error);

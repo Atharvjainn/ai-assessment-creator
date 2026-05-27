@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const questionTypeSchema = new mongoose.Schema({
+export const questionTypeSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
@@ -28,9 +28,12 @@ const generatedQuestionSchema = new mongoose.Schema({
   },
 
   marks: Number,
+  answer: String,
 });
 
 const sectionSchema = new mongoose.Schema({
+  label : String,
+
   title: String,
 
   instruction: String,

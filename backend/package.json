@@ -5,13 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
-    "worker" : "tsx watch src/workers/generate_worker.ts"
+    "worker": "tsx watch src/workers/generate_worker.ts",
+    "test" : "tsx src/test/ai-test.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bullmq": "^5.77.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

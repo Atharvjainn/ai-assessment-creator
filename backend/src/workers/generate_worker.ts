@@ -3,6 +3,7 @@ import { Assignment } from '../models/assessment_models.js';
 import { queueName } from '../queues/assignmentqueue.js'
 import { redisConnection } from '../config/redis.js'
 import { connectDB } from '../config/db.js';
+import { generate } from '../test/ai-test.js';
 
 await connectDB()
 
@@ -10,12 +11,14 @@ const worker = new Worker(
     queueName,
     async(job) => {
         console.log("working on the job",job.data)
-        const assignment = await Assignment.findByIdAndUpdate(
+        await Assignment.findByIdAndUpdate(
             job.data.assignmentId,
             {
-                status : "completed"
+                status : "processing"
             }
         );
+        await generate(job.data.assignmentId);
+        console.log('Job Completed!!');
         
     },
     {

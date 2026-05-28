@@ -9,7 +9,8 @@
     "worker": "tsx watch src/workers/generate_worker.ts",
     "test": "tsx src/test/ai-test.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "worker:start": "node dist/workers/generate_worker.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,15 +1,12 @@
 import express from 'express'
-import { PORT } from './config/env.js';
 import { connectDB } from './config/db.js';
 import assessmentRoutes from './routes/assessment_routes.js';
 import cors from 'cors'
 
 const app = express();
+const PORT = process.env.PORT || 3001;
 
-app.use(cors({
-    origin : 'http://localhost:3000',
-    credentials : true
-}));
+app.use(cors());
 
 app.use(express.json());
 

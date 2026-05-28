@@ -1,24 +1,136 @@
-import { UploadCloud } from "lucide-react";
+"use client";
+
+import { useRef, useState } from "react";
+
+import {
+  FileText,
+  ImageIcon,
+  UploadCloud,
+  X,
+} from "lucide-react";
+import { useUIStore } from "@/store/useUIStore";
 
 export default function UploadBox() {
+  const inputRef =
+    useRef<HTMLInputElement>(null);
+
+    const {file,setFile}= useUIStore()
+
+  // const [file, setFile] =
+  //   useState<File | null>(null);
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile =
+      e.target.files?.[0];
+
+    if (!selectedFile) return;
+
+    setFile(selectedFile);
+  };
+
+  const removeFile = () => {
+    setFile(null);
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
+  const isImage =
+    file?.type.startsWith("image/");
+
   return (
-    <div className="border-2 border-dashed border-[#D8D8D8] rounded-[24px] h-[240px] flex flex-col items-center justify-center bg-[#FAFAFA]">
-      <UploadCloud
-        size={34}
-        className="text-[#2D2D2D]"
+    <div className="border-2 border-dashed border-[#D8D8D8] rounded-[24px] min-h-[240px] bg-[#FAFAFA] flex flex-col items-center justify-center px-6 py-8 transition">
+      {/* Hidden Input */}
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".pdf,image/*"
+        className="hidden"
+        onChange={handleFileChange}
       />
 
-      <p className="mt-4 text-[16px] text-[#2D2D2D]">
-        Choose a file or drag & drop it here
-      </p>
+      {!file ? (
+        <>
+          {/* Upload Icon */}
+          <div className="w-16 h-16 rounded-full bg-[#F1F1F1] flex items-center justify-center">
+            <UploadCloud
+              size={30}
+              className="text-[#2D2D2D]"
+            />
+          </div>
 
-      <p className="mt-2 text-[13px] text-[#9A9A9A]">
-        JPEG, PNG, upto 10MB
-      </p>
+          {/* Text */}
+          <p className="mt-5 text-[16px] text-[#2D2D2D] font-medium">
+            Choose a file or drag & drop it
+            here
+          </p>
 
-      <button className="mt-6 h-[42px] px-6 rounded-full bg-[#F0F0F0] text-[14px] font-medium hover:bg-[#E8E8E8] transition">
-        Browse Files
-      </button>
+          <p className="mt-2 text-[13px] text-[#9A9A9A]">
+            Supports PDF, JPG, JPEG & PNG
+            upto 10MB
+          </p>
+
+          {/* Browse */}
+          <button
+            onClick={() =>
+              inputRef.current?.click()
+            }
+            className="mt-6 h-[42px] px-6 rounded-full bg-[#F0F0F0] text-[14px] font-medium hover:bg-[#E8E8E8] transition"
+          >
+            Browse Files
+          </button>
+        </>
+      ) : (
+        <div className="w-full max-w-[520px] rounded-[22px] bg-white border border-[#E8E8E8] p-5 flex items-center justify-between shadow-sm">
+          {/* Left */}
+          <div className="flex items-center gap-4">
+            {/* File Icon */}
+            <div className="w-14 h-14 rounded-2xl bg-[#F3F3F3] flex items-center justify-center">
+              {isImage ? (
+                <ImageIcon
+                  size={24}
+                  className="text-[#2D2D2D]"
+                />
+              ) : (
+                <FileText
+                  size={24}
+                  className="text-[#2D2D2D]"
+                />
+              )}
+            </div>
+
+            {/* File Details */}
+            <div>
+              <p className="text-[15px] font-medium text-[#2D2D2D] break-all">
+                {file.name}
+              </p>
+
+              <p className="mt-1 text-[13px] text-[#8A8A8A]">
+                {(
+                  file.size /
+                  1024 /
+                  1024
+                ).toFixed(2)}{" "}
+                MB
+              </p>
+            </div>
+          </div>
+
+          {/* Remove */}
+          <button
+            onClick={removeFile}
+            className="w-10 h-10 rounded-full hover:bg-[#F5F5F5] flex items-center justify-center transition"
+          >
+            <X
+              size={18}
+              className="text-[#777]"
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

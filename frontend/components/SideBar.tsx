@@ -1,60 +1,58 @@
 "use client";
 
 import {
-  LayoutGrid,
-  Users,
-  FileText,
-  BookOpen,
-  Clock3,
   Settings,
   Sparkles,
 } from "lucide-react";
-import Image from "next/image";
 
-const menuItems = [
-  {
-    label: "Home",
-    icon: LayoutGrid,
-  },
-  {
-    label: "My Groups",
-    icon: Users,
-  },
-  {
-    label: "Assignments",
-    icon: FileText,
-    active: true,
-  },
-  {
-    label: "AI Teacher’s Toolkit",
-    icon: BookOpen,
-  },
-  {
-    label: "My Library",
-    icon: Clock3,
-  },
-];
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { menuItems } from "@/utils/items";
+import { useUIStore } from "@/store/useUIStore";
+
+
 
 export default function Sidebar() {
+  const router = useRouter();
+
+  const { activeTab, setCurrentTab } = useUIStore();
+
+  const handleNavigation = (
+    tab: string,
+    route: string
+  ) => {
+    setCurrentTab(tab);
+
+    router.push(route);
+  };
+
   return (
     <div className="w-[330px] h-full bg-[#f5f5f5] rounded-2xl shadow-[0_32px_48px_rgba(0,0,0,0.20),0_16px_48px_rgba(0,0,0,0.12)]">
-      <div className="h-full rounded-[28px]  px-7 py-6 flex flex-col shadow-sm">
+      <div className="h-full px-7 py-6 flex flex-col">
         {/* Logo */}
-        {/* <div className="flex items-center justify-start gap-3"> */}
-          {/* Replace with your logo */}
-          {/* <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-orange-400 via-orange-600 to-pink-600" /> */}
-          
-          <Image src="VedaAI-cropped.svg" alt="VedaAI Logo" width={150} height={100} priority className="object-contain" />
-
-          {/* Replace with image/logo text */}
-          {/* <h1 className="text-[20px] font-semibold text-[#2D2D2D]">
-            VedaAI
-          </h1> */}
-        {/* </div> */}
+        <div className="flex items-center">
+          <Image
+            src="/VedaAI-cropped.svg"
+            alt="VedaAI Logo"
+            width={150}
+            height={100}
+            priority
+            className="object-contain"
+          />
+        </div>
 
         {/* Create Assignment Button */}
-        <button className="mt-10 h-[54px] rounded-full bg-[#2F3137] border-[4px] border-[#F07B57] text-white flex items-center justify-center gap-3 shadow-md transition-all duration-200 hover:scale-[1.02]">
-          <Sparkles size={18} fill="white" />
+        <button className="mt-10 h-[54px] rounded-full bg-[#2F3137] border-[4px] border-[#F07B57] text-white flex items-center justify-center gap-3 shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+        onClick={() => {
+          setCurrentTab('toolkit')
+          router.push('/create-assessment')
+        }}
+        >
+          <Sparkles
+            size={18}
+            fill="white"
+          />
+
           <span className="text-[15px] font-medium">
             Create Assignment
           </span>
@@ -65,11 +63,20 @@ export default function Sidebar() {
           {menuItems.map((item, index) => {
             const Icon = item.icon;
 
+            const isActive =
+              activeTab === item.tab;
+
             return (
               <button
                 key={index}
-                className={`flex items-center gap-3 h-[42px] px-4 rounded-xl transition-all duration-200 ${
-                  item.active
+                onClick={() =>
+                  handleNavigation(
+                    item.tab,
+                    item.route
+                  )
+                }
+                className={`flex items-center gap-3 h-[42px] px-4 rounded-xl transition-all duration-200 cursor-pointer ${
+                  isActive
                     ? "bg-[#DDDDDD] text-[#2E2E2E]"
                     : "text-[#808080] hover:bg-[#E4E4E4]"
                 }`}
@@ -78,13 +85,17 @@ export default function Sidebar() {
                   size={20}
                   strokeWidth={2}
                   className={
-                    item.active ? "text-[#3B3B3B]" : "text-[#8A8A8A]"
+                    isActive
+                      ? "text-[#3B3B3B]"
+                      : "text-[#8A8A8A]"
                   }
                 />
 
                 <span
                   className={`text-[15px] ${
-                    item.active ? "font-medium" : "font-normal"
+                    isActive
+                      ? "font-medium"
+                      : "font-normal"
                   }`}
                 >
                   {item.label}
@@ -99,12 +110,15 @@ export default function Sidebar() {
           {/* Settings */}
           <button className="flex items-center gap-3 px-4 text-[#7D7D7D] hover:text-black transition-colors">
             <Settings size={20} />
-            <span className="text-[15px]">Settings</span>
+
+            <span className="text-[15px]">
+              Settings
+            </span>
           </button>
 
           {/* School Card */}
           <div className="mt-6 bg-[#E3E3E3] rounded-2xl p-4 flex items-center gap-4">
-            {/* Replace with profile image */}
+            {/* Profile */}
             <div className="w-14 h-14 rounded-full bg-[#CFCFCF]" />
 
             <div>

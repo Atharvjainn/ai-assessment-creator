@@ -64,9 +64,20 @@ export const generate = async (assignmentId : string) => {
   const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
   // load PDF — put any PDF at test/sample.pdf
-  const pdfPath = path.join(__dirname, "sample.pdf");
-  const pdfBuffer = fs.readFileSync(pdfPath);
-  const base64PDF = pdfBuffer.toString("base64");
+  const fileURL = assignment?.uploadedFileUrl;
+  const fileResponse = await fetch(fileURL!);
+  if (!fileResponse.ok) {
+    throw new Error(
+      "Failed to fetch uploaded file"
+    );
+  }
+  const contentType = fileResponse.headers.get(
+                        "content-type"
+                        ) || "application/pdf";
+
+  const arrayBuffer = await fileResponse.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  const base64File = buffer.toString("base64");
 
   const prompt = buildPrompt(questionTypes);
 
@@ -75,8 +86,8 @@ export const generate = async (assignmentId : string) => {
   const result = await model.generateContent([
     {
       inlineData: {
-        mimeType: "application/pdf",
-        data: base64PDF,
+        mimeType: contentType,
+        data: base64File,
       },
     },
     { text: prompt },

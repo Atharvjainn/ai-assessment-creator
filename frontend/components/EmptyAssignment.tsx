@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useUIStore } from "@/store/useUIStore";
 
 export default function EmptyAssignment() {
+  const {setCurrentTab,activeTab} = useUIStore();
+  const router = useRouter()
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="flex flex-col items-center text-center">
@@ -29,7 +33,12 @@ export default function EmptyAssignment() {
         </p>
 
         {/* CTA Button */}
-        <button className="mt-10 h-[64px] px-10 rounded-full bg-[#171717] text-white flex items-center gap-3 text-[24px] font-medium hover:opacity-90 transition">
+        <button className="mt-10 h-[64px] px-10 rounded-full bg-[#171717] text-white flex items-center gap-3 text-[24px] font-medium hover:opacity-90 transition cursor-pointer hover:scale-102"
+        onClick={() => {
+          setCurrentTab('toolkit')
+          router.push('/create-assessment')
+        }}
+        >
           <Plus size={28} />
 
           <span>Create Your First Assignment</span>

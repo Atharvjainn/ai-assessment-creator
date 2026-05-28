@@ -3,7 +3,7 @@ import EmptyAssignment from '@/components/EmptyAssignment'
 const page = () => {
   return (
     <>
-        <EmptyAssignment />
+        <EmptyAssignment /> // currently no assigments isliye no logic
     </>
   )
 }

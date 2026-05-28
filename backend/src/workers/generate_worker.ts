@@ -4,6 +4,17 @@ import { queueName } from '../queues/assignmentqueue.js'
 import { redisConnection } from '../config/redis.js'
 import { connectDB } from '../config/db.js';
 import { generate } from '../test/ai-test.js';
+import express from "express";
+
+const app = express();
+
+app.get("/", (_, res) => {
+  res.send("Worker running");
+});
+
+app.listen(process.env.PORT || 10000, () => {
+  console.log("Health server running");
+});
 
 await connectDB()
 

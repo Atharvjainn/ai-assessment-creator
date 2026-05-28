@@ -1,6 +1,5 @@
 import express from 'express'
-import { Assignment } from '../models/assessment_models.js';
-import { createAssessment } from '../controllers/assessment.js';
+import { createAssessment,getAllAssessments } from '../controllers/assessment.js';
 
 const router = express.Router();
 
@@ -12,6 +11,7 @@ router.get('/check',(req,res) => {
 })
 
 router.post("/create-assessment",createAssessment)
+router.get('/get-assessments',getAllAssessments);
 
 export default router
 

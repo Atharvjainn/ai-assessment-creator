@@ -3,6 +3,7 @@ import { Assignment } from "../models/assessment_models.js"
 import { assignmentqueue } from "../queues/assignmentqueue.js";
 
 
+
 export const createAssessment = async(req : Request,res : Response) => {
     try {
         const assessment = await Assignment.create(req.body);
@@ -20,7 +21,23 @@ export const createAssessment = async(req : Request,res : Response) => {
         console.log("Assessment cannot be created!")
         return res.status(400).json({
             data : [],
+            success : false
+        })
+    }
+}
+
+export const getAllAssessments = async(req : Request,res : Response) => {
+    try {
+        const assessments = await Assignment.find();
+        return res.status(200).json({
+            data : assessments,
             success : true
+        })
+    } catch (error) {
+        console.log("Assessments cannot be fetched!")
+        return res.status(400).json({
+            data : [],
+            success : false
         })
     }
 }

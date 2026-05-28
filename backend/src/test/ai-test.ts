@@ -63,9 +63,20 @@ export const generate = async (assignmentId : string) => {
   const genAI = new GoogleGenerativeAI(GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
 
-  // load PDF — put any PDF at test/sample.pdf
   const fileURL = assignment?.uploadedFileUrl;
-  const fileResponse = await fetch(fileURL!);
+  console.log("FILE URL FROM DB:", fileURL); // 👈 add this
+  if (!fileURL) {
+    throw new Error("No uploaded file URL found on assignment");
+  }
+  const fileResponse = await fetch(fileURL!, {
+  method: "GET",
+  headers: { "User-Agent": "Mozilla/5.0" },
+});
+if (!fileResponse.ok) {
+  throw new Error(
+    `Fetch failed: ${fileResponse.status} ${fileResponse.statusText} — URL: ${fileURL}`
+  );
+}
   if (!fileResponse.ok) {
     throw new Error(
       "Failed to fetch uploaded file"

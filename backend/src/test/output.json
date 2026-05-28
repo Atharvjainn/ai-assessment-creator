@@ -6,53 +6,53 @@
       "instruction": "Choose the correct option. Each question carries 1 mark.",
       "questions": [
         {
-          "text": "A game of chance consists of spinning an arrow which comes to rest pointing at one of the numbers 1, 2, 3, 4, 5, 6, 7, 8, and these are equally likely outcomes. What is the probability that it will point at a number greater than 2?\n\nA) 3/4\nB) 5/8\nC) 1/2\nD) 7/8",
+          "text": "Which of the following cannot be the probability of an event?\n\nA) 2/3\nB) -1.5\nC) 15%\nD) 0.7",
           "difficulty": "easy",
           "marks": 1,
-          "answer": "A) 3/4. Explanation: The numbers greater than 2 are 3, 4, 5, 6, 7, and 8. There are 6 favorable outcomes out of 8. Probability = 6/8 = 3/4."
+          "answer": "B) -1.5. The probability P(E) of an event E is always a real number such that 0 ≤ P(E) ≤ 1. Therefore, it cannot be negative."
         },
         {
-          "text": "A piggy bank contains hundred 50p coins, fifty ₹ 1 coins, twenty ₹ 2 coins and ten ₹ 5 coins. If it is equally likely that one of the coins will fall out when the bank is turned upside down, what is the probability that the coin will not be a ₹ 5 coin?\n\nA) 1/18\nB) 17/18\nC) 5/18\nD) 9/10",
+          "text": "If P(E) = 0.05, what is the probability of 'not E' (P(Ē))?\n\nA) 0.95\nB) 0.05\nC) 0.50\nD) 1.05",
           "difficulty": "medium",
           "marks": 1,
-          "answer": "B) 17/18. Explanation: Total number of coins = 100 + 50 + 20 + 10 = 180. Number of ₹ 5 coins = 10. Number of coins other than ₹ 5 = 180 - 10 = 170. Probability = 170/180 = 17/18."
+          "answer": "A) 0.95. Since P(E) + P(Ē) = 1, we have P(Ē) = 1 - P(E) = 1 - 0.05 = 0.95."
         },
         {
-          "text": "12 defective pens are accidentally mixed with 132 good ones. If one pen is taken out at random from this lot, find the probability that the pen taken out is a good one.\n\nA) 11/12\nB) 1/12\nC) 11/13\nD) 12/13",
-          "difficulty": "medium",
+          "text": "The sum of the probabilities of all the elementary events of an experiment is:\n\nA) 0\nB) 0.5\nC) 1\nD) 2",
+          "difficulty": "easy",
           "marks": 1,
-          "answer": "A) 11/12. Explanation: Total number of pens = 12 + 132 = 144. Number of good pens = 132. Probability = 132/144 = 11/12."
+          "answer": "C) 1. By definition, the sum of the probabilities of all the elementary events of an experiment is 1."
         },
         {
-          "text": "A box contains 90 discs which are numbered from 1 to 90. If one disc is drawn at random from the box, what is the probability that it bears a perfect square number?\n\nA) 1/10\nB) 9/10\nC) 1/9\nD) 3/10",
+          "text": "A missing helicopter is reported to have crashed somewhere in a rectangular region of dimensions 9 km by 4.5 km. There is a lake of dimensions 3 km by 2.5 km in that region. What is the probability that it crashed inside the lake?\n\nA) 5/27\nB) 7.5/40\nC) 2/9\nD) 1/12",
           "difficulty": "hard",
           "marks": 1,
-          "answer": "A) 1/10. Explanation: The perfect square numbers between 1 and 90 are 1, 4, 9, 16, 25, 36, 49, 64, and 81 (total 9 numbers). Out of 90 total outcomes, the probability is 9/90 = 1/10."
+          "answer": "A) 5/27. The total area of the region is 9 km × 4.5 km = 40.5 km². The area of the lake is 3 km × 2.5 km = 7.5 km². The probability is Area of lake / Total area = 7.5 / 40.5 = 75 / 405 = 5/27."
         }
       ]
     },
     {
       "label": "B",
-      "title": "Short Questions",
-      "instruction": "Answer the following questions. Each question carries 2 marks.",
+      "title": "Short Answer Questions",
+      "instruction": "Attempt all questions. Each question carries 2 marks.",
       "questions": [
         {
-          "text": "Gopi buys a fish from a shop for his aquarium. The shopkeeper takes out one fish at random from a tank containing 5 male fish and 8 female fish. Find the probability that the fish taken out is a male fish.",
+          "text": "A die is thrown once. Find the probability of getting:\n(i) a prime number\n(ii) an odd number",
           "difficulty": "easy",
           "marks": 2,
-          "answer": "Total number of fish in the tank = 5 (male) + 8 (female) = 13.\nNumber of male fish (favorable outcomes) = 5.\nProbability of getting a male fish = Number of male fish / Total number of fish = 5/13."
+          "answer": "The possible outcomes when a die is thrown once are {1, 2, 3, 4, 5, 6}, so total number of outcomes = 6.\n(i) Prime numbers are {2, 3, 5} (3 outcomes). P(prime number) = 3/6 = 1/2.\n(ii) Odd numbers are {1, 3, 5} (3 outcomes). P(odd number) = 3/6 = 1/2."
         },
         {
-          "text": "A die is thrown once. Find the probability of getting:\n(i) a prime number\n(ii) a number lying between 2 and 6.",
+          "text": "Savita and Hamida are friends. What is the probability that both will have:\n(i) different birthdays?\n(ii) the same birthday? (ignoring a leap year)",
           "difficulty": "medium",
           "marks": 2,
-          "answer": "When a die is thrown, total possible outcomes = {1, 2, 3, 4, 5, 6}, which is 6.\n(i) Prime numbers are 2, 3, and 5 (3 favorable outcomes). Probability = 3/6 = 1/2.\n(ii) Numbers lying between 2 and 6 are 3, 4, and 5 (3 favorable outcomes). Probability = 3/6 = 1/2."
+          "answer": "There are 365 days in a non-leap year. Let Savita's birthday be any day. \n(i) If Hamida's birthday is different from Savita's, the number of favorable outcomes for her birthday is 365 - 1 = 364. Hence, P(different birthdays) = 364/365.\n(ii) P(same birthday) = 1 - P(different birthdays) = 1 - 364/365 = 1/365."
         },
         {
-          "text": "A lot of 20 bulbs contain 4 defective ones. One bulb is drawn at random from the lot.\n(i) What is the probability that this bulb is defective?\n(ii) Suppose the bulb drawn in (i) is not defective and is not replaced. Now one bulb is drawn at random from the rest. What is the probability that this bulb is not defective?",
+          "text": "Two dice, one blue and one grey, are thrown at the same time. Find the probability that the sum of the two numbers appearing on top of the dice is:\n(i) 8\n(ii) less than or equal to 12",
           "difficulty": "hard",
           "marks": 2,
-          "answer": "(i) Total number of bulbs = 20. Defective bulbs = 4. Probability of drawing a defective bulb = 4/20 = 1/5.\n(ii) Since the first bulb drawn was not defective and is not replaced, the remaining total number of bulbs = 19. The number of remaining non-defective bulbs = (20 - 4) - 1 = 15. Probability that this bulb is not defective = 15/19."
+          "answer": "The total number of possible outcomes when two dice are thrown is 6 × 6 = 36.\n(i) The outcomes favorable to the sum of the two numbers being 8 are: (2, 6), (3, 5), (4, 4), (5, 3), (6, 2). Number of favorable outcomes = 5. Therefore, P(sum is 8) = 5/36.\n(ii) Since the maximum sum possible is 6 + 6 = 12, all 36 outcomes have a sum less than or equal to 12. Therefore, P(sum ≤ 12) = 36/36 = 1."
         }
       ]
     }

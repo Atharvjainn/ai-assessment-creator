@@ -44,6 +44,7 @@ const sectionSchema = new mongoose.Schema({
 const assignmentSchema = new mongoose.Schema(
   {
     uploadedFileUrl: String,
+    title : String,
 
     dueDate: {
       type: Date,

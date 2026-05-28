@@ -20,7 +20,7 @@ export default function AssignmentForm() {
   const initialFormData: AssignmentFormData =
 {
   uploadedFileUrl: "",
-
+  title : "",
   dueDate: "",
 
   additionalInstructions: "",
@@ -192,6 +192,25 @@ export default function AssignmentForm() {
       <div className="mt-8">
         <UploadBox />
       </div>
+
+      <div className="mt-8">
+    <label className="text-[15px] font-medium text-[#2F2F2F]">
+    Assignment Title
+    </label>
+
+      <input
+        type="text"
+        value={formData.title}
+        onChange={(e) =>
+          updateField(
+            "title",
+            e.target.value
+          )
+        }
+        placeholder="e.g Quiz on Electricity"
+        className="mt-3 w-full h-[54px] rounded-full border border-[#E1E1E1] bg-[#FAFAFA] px-5 outline-none text-[15px] text-[#2D2D2D] placeholder:text-[#B1B1B1]"
+      />
+    </div>
 
       {/* Due Date */}
       <div className="mt-8">

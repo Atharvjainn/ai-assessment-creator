@@ -8,7 +8,7 @@ export type QuestionType = {
 
 export type AssignmentFormData = {
   uploadedFileUrl: string;
-
+  title : string,
   dueDate: string;
 
   additionalInstructions: string;

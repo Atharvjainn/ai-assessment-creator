@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3001;
 
 
 app.use(cors({
-  origin: "https://ai-assessment-creator-1-w44e.onrender.com/",
+  origin: "https://ai-assessment-creator-1-w44e.onrender.com",
   credentials: true
 }));
 

@@ -82,56 +82,76 @@ export default function QuestionPaper({
 
           <p>Roll Number: __________________</p>
 
-          <p>Class: {className} Section: ________</p>
+          <p>
+            Class: {className} Section:
+            ________
+          </p>
         </div>
 
         {/* Sections */}
         <div className="mt-20">
-          {sections.map((section, sectionIndex) => (
-            <div
-              key={sectionIndex}
-              className="mb-20"
-            >
-              {/* Section Heading */}
-              <div className="text-center">
-                <h2 className="text-[38px] font-semibold text-[#2D2D2D]">
-                  Section {section.label}
-                </h2>
+          {sections.map(
+            (section, sectionIndex) => (
+              <div
+                key={section.label}
+                className="mb-20"
+              >
+                {/* Section Heading */}
+                <div className="text-center">
+                  <h2 className="text-[38px] font-semibold text-[#2D2D2D]">
+                    Section {section.label}
+                  </h2>
 
-                <h3 className="mt-8 text-[24px] font-medium text-[#2D2D2D]">
-                  {section.title}
-                </h3>
+                  <h3 className="mt-8 text-[24px] font-medium text-[#2D2D2D]">
+                    {section.title}
+                  </h3>
 
-                <p className="mt-3 italic text-[18px] text-[#777777]">
-                  {section.instruction}
-                </p>
+                  <p className="mt-3 italic text-[18px] text-[#777777]">
+                    {section.instruction}
+                  </p>
+                </div>
+
+                {/* Questions */}
+                <div className="mt-12 space-y-8">
+                  {section.questions.map(
+                    (
+                      question,
+                      questionIndex
+                    ) => (
+                      <div
+                        key={`${section.label}-${questionIndex}`}
+                        className="flex gap-4 text-[18px] leading-[34px] text-[#2D2D2D]"
+                      >
+                        {/* Number */}
+                        <span className="font-medium">
+                          {questionIndex +
+                            1}
+                          .
+                        </span>
+
+                        {/* Question */}
+                        <p>
+                          [
+                          {
+                            question.difficulty
+                          }
+                          ]{" "}
+                          {
+                            question.text
+                          }{" "}
+                          [
+                          {
+                            question.marks
+                          }{" "}
+                          Marks]
+                        </p>
+                      </div>
+                    )
+                  )}
+                </div>
               </div>
-
-              {/* Questions */}
-              <div className="mt-12 space-y-8">
-                {section.questions.map(
-                  (question, questionIndex) => (
-                    <div
-                      key={questionIndex}
-                      className="flex gap-4 text-[18px] leading-[34px] text-[#2D2D2D]"
-                    >
-                      {/* Number */}
-                      <span className="font-medium">
-                        {questionIndex + 1}.
-                      </span>
-
-                      {/* Question */}
-                      <p>
-                        [{question.difficulty}]{" "}
-                        {question.text} [
-                        {question.marks} Marks]
-                      </p>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
 
         {/* Footer */}
@@ -148,20 +168,26 @@ export default function QuestionPaper({
           </h2>
 
           <div className="mt-10 space-y-8">
-            {sections.flatMap((section) =>
-              section.questions.map(
-                (question, index) => (
-                  <div
-                    key={index}
-                    className="text-[17px] leading-[34px] text-[#2D2D2D]"
-                  >
-                    <span className="font-medium">
-                      {index + 1}.
-                    </span>{" "}
-                    {question.answer}
-                  </div>
+            {sections.flatMap(
+              (section) =>
+                section.questions.map(
+                  (
+                    question,
+                    index
+                  ) => (
+                    <div
+                      key={`${section.label}-${index}`}
+                      className="text-[17px] leading-[34px] text-[#2D2D2D]"
+                    >
+                      <span className="font-medium">
+                        {index + 1}.
+                      </span>{" "}
+                      {
+                        question.answer
+                      }
+                    </div>
+                  )
                 )
-              )
             )}
           </div>
         </div>

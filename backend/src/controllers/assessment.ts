@@ -41,3 +41,19 @@ export const getAllAssessments = async(req : Request,res : Response) => {
         })
     }
 }
+
+export const getAssessmentById = async(req : Request,res : Response) => {
+    try {
+        const assessment = await Assignment.findById(req.params.id);
+        return res.status(200).json({
+            data : assessment,
+            success : true
+        })
+    } catch (error) {
+        console.log("Assessment cannot be fetched!")
+        return res.status(400).json({
+            data : [],
+            success : false
+        })
+    }
+}

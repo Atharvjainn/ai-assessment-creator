@@ -1,18 +1,16 @@
-import EmptyAssignment from '@/components/EmptyAssignment'
-import Sidebar from '@/components/SideBar'
-import TopNavbar from '@/components/TopNavbar'
-import React from 'react'
-import { useRouter } from 'next/navigation'
+"use client";
 
-const page = () => {
-  const router = useRouter()
-  router.push('/dashboard')
-  return (
-    <>
-     <div>Hi</div>
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-    </>
-  )
-}
+const Page = () => {
+  const router = useRouter();
 
-export default page
+  useEffect(() => {
+    router.replace("/dashboard");
+  }, [router]);
+
+  return null;
+};
+
+export default Page;

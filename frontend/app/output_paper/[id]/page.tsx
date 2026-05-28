@@ -6,15 +6,16 @@ import { useAssessmentStore } from "@/store/useAssessmentStore";
 
 const Page = () => {
   const params = useParams();
-  const { assignment, setAssignment, stopPolling } = useAssessmentStore()
-  const id = params?.id;
+  const { assignment, setAssignment, stopListening } = useAssessmentStore();
+  const id = params?.id as string;
 
   useEffect(() => {
     if (id) {
-      setAssignment(id as string);
+      setAssignment(id);
     }
-    // Stop polling when leaving the page
-    return () => { stopPolling() }
+    return () => {
+      if (id) stopListening(id);
+    };
   }, [id]);
 
   if (!assignment) {

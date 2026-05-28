@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { axiosInstance } from '../utils/axios'
 import type { AssignmentFormData } from '@/utils/types'
 import toast from 'react-hot-toast'
+import { socket } from '@/utils/sockets'
 
 type Assessment = {
   _id: string;
@@ -13,98 +14,104 @@ type Assessment = {
 
 type AssessmentStore = {
   sendingtoqueue: boolean;
-  sendtoqueue: (data: AssignmentFormData) => void;
+  sendtoqueue: (data: AssignmentFormData) => Promise<void>;
   assessments: Assessment[];
-  setAssessments: () => void;
+  setAssessments: () => Promise<void>;
   assessmentsloading: boolean;
   assignment: null | any;
-  setAssignment: (id: string) => void;
-  pollAssignment: (id: string) => void;
-  stopPolling: () => void;
-  _pollTimer: ReturnType<typeof setInterval> | null;
-  deleteAssessment: (id: string) => Promise<void>
+  setAssignment: (id: string) => Promise<void>;
+  stopListening: (id: string) => void;
+  deleteAssessment: (id: string) => Promise<void>;
 }
 
 export const useAssessmentStore = create<AssessmentStore>((set, get) => ({
   sendingtoqueue: false,
+
   sendtoqueue: async (data: AssignmentFormData) => {
-    set({ sendingtoqueue: true })
+    set({ sendingtoqueue: true });
     try {
-      await axiosInstance.post('/api/create-assessment', data)
-      toast.success('Assignment queued for generation!')
+      await axiosInstance.post('/api/create-assessment', data);
+      toast.success('Assignment queued for generation!');
     } catch (error) {
-      console.log("cannot send request")
-      toast.error('Something went wrong. Please try again.')
+      console.log("Cannot send request");
+      toast.error('Something went wrong. Please try again.');
     } finally {
-      set({ sendingtoqueue: false })
+      set({ sendingtoqueue: false });
     }
   },
+
   assessments: [],
   assessmentsloading: false,
+
   setAssessments: async () => {
-    set({ assessmentsloading: true })
+    set({ assessmentsloading: true });
     try {
       const response = await axiosInstance.get('/api/get-assessments');
-      set({ assessments: response.data.data })
+      set({ assessments: response.data.data });
     } catch (error) {
-      console.log("cannot fetch assessments")
-      toast.error('Something went wrong. Please try again.')
+      console.log("Cannot fetch assessments");
+      toast.error('Something went wrong. Please try again.');
     } finally {
-      set({ assessmentsloading: false })
-      
+      set({ assessmentsloading: false });
     }
   },
+
   assignment: null,
-  _pollTimer: null,
+
   setAssignment: async (id: string) => {
     try {
-      const res = await axiosInstance.get(`/api/get-assessment/${id}`)
-      const data = res.data.data
-      set({ assignment: data })
-      // Start polling if not yet completed
+      const res = await axiosInstance.get(`/api/get-assessment/${id}`);
+      const data = res.data.data;
+      set({ assignment: data });
+
       if (data.status === 'pending' || data.status === 'processing') {
-        get().pollAssignment(id)
+        socket.connect();
+
+        
+        socket.emit("watch:assignment", id);
+
+        socket.on("assignment:updated", async (payload: { assignmentId: string; status: string }) => {
+         
+          try {
+            const updated = await axiosInstance.get(`/api/get-assessment/${id}`);
+            set({ assignment: updated.data.data });
+          } catch {
+            console.log("Error re-fetching assignment");
+          }
+
+          if (payload.status === 'completed' || payload.status === 'failed') {
+            get().stopListening(id);
+          }
+        });
+
+        socket.on("connect_error", () => {
+          toast.error("Lost connection to server. Please refresh.");
+          get().stopListening(id);
+        });
       }
     } catch (error) {
-      console.log("cannot fetch assignment")
-      toast.error('Something went wrong. Please try again.')
+      console.log("Cannot fetch assignment");
+      toast.error('Something went wrong. Please try again.');
     }
   },
-  pollAssignment: (id: string) => {
-    // Don't start a second interval if already running
-    if (get()._pollTimer) return
-    const timer = setInterval(async () => {
-      try {
-        const res = await axiosInstance.get(`/api/get-assessment/${id}`)
-        const data = res.data.data
-        set({ assignment: data })
-        if (data.status === 'completed' || data.status === 'failed') {
-          get().stopPolling()
-        }
-      } catch (error) {
-        get().stopPolling()
-        toast.error('Something went wrong. Please try again.')
-      }
-    }, 3000)
-    set({ _pollTimer: timer })
+
+  stopListening: (id: string) => {
+    socket.emit("unwatch:assignment", id);  //exit krdo
+    socket.off("assignment:updated");
+    socket.off("connect_error");
+    socket.disconnect();
   },
-  stopPolling: () => {
-    const timer = get()._pollTimer
-    if (timer) {
-      clearInterval(timer)
-      set({ _pollTimer: null })
-    }
-  },
+
   deleteAssessment: async (id: string) => {
-  try {
-    await axiosInstance.delete(`/api/delete-assessment/${id}`)
-    set((state) => ({
-      assessments: state.assessments.filter((a) => a._id !== id)
-    }))
-    toast.success('Assignment deleted.')
-  } catch (error) {
-    console.log("cannot delete assessment")
-    toast.error('Something went wrong. Please try again.')
+    try {
+      await axiosInstance.delete(`/api/delete-assessment/${id}`);
+      set((state) => ({
+        assessments: state.assessments.filter((a) => a._id !== id)
+      }));
+      toast.success('Assignment deleted.');
+    } catch (error) {
+      console.log("Cannot delete assessment");
+      toast.error('Something went wrong. Please try again.');
+    }
   }
-}
-}))
+}));

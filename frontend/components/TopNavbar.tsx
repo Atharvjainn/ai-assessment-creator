@@ -3,8 +3,10 @@
 import { Bell, ChevronDown, ArrowLeft, LayoutGrid, Menu } from "lucide-react";
 import Image from "next/image";
 import { useUIStore } from "@/store/useUIStore";
+import { useRouter } from "next/navigation";
 
 export default function TopNavbar() {
+  const router = useRouter()
   return (
     <div className="w-full h-[60px] md:h-[72px] bg-[#FFFFFFBF] rounded-[18px] md:rounded-[22px] px-4 md:px-8 flex items-center justify-between shadow-sm flex-shrink-0">
       {/* Left Side */}
@@ -14,7 +16,11 @@ export default function TopNavbar() {
           <Image src="/VedaAI-cropped.svg" alt="VedaAI" width={100} height={40} className="object-contain" />
         </div>
         <div className="hidden md:flex items-center gap-5">
-          <button className="text-[#2E2E2E] hover:opacity-70 transition">
+          <button className="text-[#2E2E2E] hover:opacity-70 transition"
+          onClick={() => {
+            router.push('/dashboard')
+          }}
+          >
             <ArrowLeft size={28} strokeWidth={2.2} />
           </button>
           <div className="flex items-center gap-3 text-[#A1A1A1]">

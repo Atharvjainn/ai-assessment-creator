@@ -6,16 +6,14 @@ import { useAssessmentStore } from "@/store/useAssessmentStore";
 
 const Page = () => {
   const params = useParams();
-  const { assignment, setAssignment, stopListening } = useAssessmentStore();
-  const id = params?.id as string;
+  const { assignment, setAssignment, stopPolling } = useAssessmentStore()
+  const id = params?.id;
 
   useEffect(() => {
     if (id) {
-      setAssignment(id);
+       setAssignment(id as string);
     }
-    return () => {
-      if (id) stopListening(id);
-    };
+    return () => { stopPolling() }
   }, [id]);
 
   if (!assignment) {

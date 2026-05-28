@@ -136,12 +136,6 @@ if (!fileResponse.ok) {
     },
   });
 
-  // also dump raw JSON if you want to inspect
-  fs.writeFileSync(
-    path.join(__dirname, "output.json"),
-    JSON.stringify(paper, null, 2)
-  );
-  console.log("Raw JSON saved to test/output.json");
 };
 
 // generate(assignmentId).catch(console.error);

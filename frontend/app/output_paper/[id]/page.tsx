@@ -1,39 +1,27 @@
 "use client";
-
-import {
-  useEffect,
-  useState,
-} from "react";
-
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
-
-import { axiosInstance } from "@/utils/axios";
-import {OutputPage} from '../../../pages/OutputPage'
+import { OutputPage } from '../../../pages/OutputPage'
 import { useAssessmentStore } from "@/store/useAssessmentStore";
 
 const Page = () => {
   const params = useParams();
-  const {assignment,setAssignment} = useAssessmentStore()
+  const { assignment, setAssignment, stopPolling } = useAssessmentStore()
   const id = params?.id;
 
-  
   useEffect(() => {
     if (id) {
       setAssignment(id as string);
     }
+    // Stop polling when leaving the page
+    return () => { stopPolling() }
   }, [id]);
 
   if (!assignment) {
-    return (
-      <div className="p-10">
-        Loading...
-      </div>
-    );
+    return <div className="p-10">Loading...</div>;
   }
 
-  return (
-    <OutputPage />
-  );
+  return <OutputPage />;
 };
 
 export default Page;

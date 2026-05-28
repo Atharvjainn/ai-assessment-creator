@@ -21,7 +21,7 @@ import { useAssessmentStore } from "@/store/useAssessmentStore";
 export default function AssignmentsPage() {
   const router = useRouter();
 
-  const { assessments } =
+  const { assessments,deleteAssessment } =
     useAssessmentStore();
 
   const { setCurrentTab } =
@@ -131,6 +131,22 @@ export default function AssignmentsPage() {
               {assignment.title}
             </h2>
 
+            {/* Status Badge */}
+            <div className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-medium ${
+              assignment.status === 'completed' ? 'bg-[#EAF3DE] text-[#3B6D11]' :
+              assignment.status === 'processing' ? 'bg-[#E6F1FB] text-[#185FA5]' :
+              assignment.status === 'failed'     ? 'bg-[#FCEBEB] text-[#A32D2D]' :
+                                                  'bg-[#FAEEDA] text-[#854F0B]'
+            }`}>
+              <div className={`w-1.5 h-1.5 rounded-full ${
+                assignment.status === 'completed' ? 'bg-[#3B6D11]' :
+                assignment.status === 'processing' ? 'bg-[#185FA5]' :
+                assignment.status === 'failed'     ? 'bg-[#A32D2D]' :
+                                                    'bg-[#854F0B]'
+              }`} />
+              {assignment.status}
+            </div>
+
             {/* Bottom */}
             <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
               <p className="text-[15px] text-[#7D7D7D]">
@@ -174,9 +190,17 @@ export default function AssignmentsPage() {
                   View Assignment
                 </button>
 
-                <button className="w-full px-4 py-3 text-left text-[14px] text-[#FF4D4D] hover:bg-[#FFF3F3] transition">
-                  Delete
-                </button>
+               <button
+                className="w-full px-4 py-3 text-left text-[14px] text-[#FF4D4D] hover:bg-[#FFF3F3] transition"
+                onClick={async () => {
+                  if (confirm(`Delete "${assignment.title}"?`)) {
+                    await deleteAssessment(assignment._id)
+                    setOpenMenuId(null)
+                  }
+                }}
+              >
+                Delete
+              </button>
               </div>
             )}
           </div>

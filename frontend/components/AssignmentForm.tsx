@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState,useRef } from "react";
-
+import { useRouter } from 'next/navigation'
 import {
   CalendarDays,
   Minus,
@@ -17,6 +17,9 @@ import { uploadToCloudinary } from "@/utils/cloudinary";
 import { useAssessmentStore } from "@/store/useAssessmentStore";
 
 export default function AssignmentForm() {
+  const router = useRouter()
+  const [submitted, setSubmitted] = useState(false)
+  const { sendingtoqueue } = useAssessmentStore()
   const initialFormData: AssignmentFormData =
 {
   uploadedFileUrl: "",
@@ -166,6 +169,8 @@ export default function AssignmentForm() {
     await sendtoqueue(payload)
     setFormData(initialFormData)
     setFile(null)
+    setSubmitted(true)
+    setTimeout(() => router.push('/dashboard'), 1500)
     
   };
 
@@ -461,11 +466,21 @@ export default function AssignmentForm() {
 
       {/* Submit */}
       <button
-        onClick={handleSubmit}
-        className="mt-10 w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium hover:opacity-90 transition"
-      >
-        Generate Assignment
-      </button>
+  onClick={handleSubmit}
+  disabled={sendingtoqueue || submitted}
+  className="mt-10 w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-3"
+>
+  {sendingtoqueue ? (
+    <>
+      <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+      <span>Sending to queue...</span>
+    </>
+  ) : submitted ? (
+    <span>✓ Queued! Redirecting...</span>
+  ) : (
+    <span>Generate Assignment</span>
+  )}
+</button>
     </div>
   );
 }

@@ -57,3 +57,13 @@ export const getAssessmentById = async(req : Request,res : Response) => {
         })
     }
 }
+
+export const deleteAssessment = async (req: Request, res: Response) => {
+  try {
+    await Assignment.findByIdAndDelete(req.params.id);
+    return res.status(200).json({ success: true })
+  } catch (error) {
+    console.log("Assessment cannot be deleted!")
+    return res.status(400).json({ success: false })
+  }
+}

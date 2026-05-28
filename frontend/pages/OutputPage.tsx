@@ -1,7 +1,7 @@
 import QuestionPaper from '@/components/QuestionPaper'
 import { useAssessmentStore } from '@/store/useAssessmentStore'
 
-export const OutputPage = () => {
+const  OutputPage = () => {
   const { assignment } = useAssessmentStore()
   const status = assignment?.status
 
@@ -47,3 +47,5 @@ export const OutputPage = () => {
     />
   )
 }
+
+export default OutputPage

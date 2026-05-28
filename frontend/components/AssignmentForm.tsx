@@ -19,6 +19,7 @@ import { useAssessmentStore } from "@/store/useAssessmentStore";
 export default function AssignmentForm() {
   const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false) 
   const { sendingtoqueue } = useAssessmentStore()
   const initialFormData: AssignmentFormData =
 {
@@ -158,6 +159,7 @@ export default function AssignmentForm() {
 
   const handleSubmit = async() => {
     console.log(formData);
+     setIsSubmitting(true)
     let payload  = { ...formData };
     if(file){
       const upload = await uploadToCloudinary(file!)
@@ -170,6 +172,7 @@ export default function AssignmentForm() {
     setFormData(initialFormData)
     setFile(null)
     setSubmitted(true)
+    setIsSubmitting(false) 
     setTimeout(() => router.push('/dashboard'), 1500)
     
   };
@@ -180,18 +183,10 @@ export default function AssignmentForm() {
   const {sendtoqueue} = useAssessmentStore()
 
   return (
-    <div className="w-full max-w-[980px] rounded-[30px] bg-[#F5F5F5] p-8 shadow-[0_16px_40px_rgba(0,0,0,0.08)]">
+    <div className="w-full max-w-[980px] rounded-[20px] md:rounded-[30px] bg-[#F5F5F5] p-5 md:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.08)]">
       {/* Heading */}
-      <div>
-        <h2 className="text-[28px] font-semibold text-[#2D2D2D]">
-          Assignment Details
-        </h2>
-
-        <p className="mt-1 text-[#8A8A8A] text-[14px]">
-          Basic information about your
-          assignment
-        </p>
-      </div>
+      <h2 className="text-[22px] md:text-[28px] font-semibold text-[#2D2D2D]">Assignment Details</h2>
+<p className="mt-1 text-[#8A8A8A] text-[13px] md:text-[14px]">Basic information about your assignment</p>
 
       {/* Upload */}
       <div className="mt-8">
@@ -272,137 +267,57 @@ export default function AssignmentForm() {
       </div>
 
       {/* Header */}
-      <div className="mt-10 grid grid-cols-[1fr_120px_120px_40px] gap-5 px-2">
-        <p className="text-[14px] font-medium">
-          Question Type
-        </p>
-
-        <p className="text-[14px] font-medium text-center">
-          Questions
-        </p>
-
-        <p className="text-[14px] font-medium text-center">
-          Marks
-        </p>
+      <div className="mt-10 hidden md:grid grid-cols-[1fr_120px_120px_40px] gap-5 px-2">
+        <p className="text-[14px] font-medium">Question Type</p>
+        <p className="text-[14px] font-medium text-center">Questions</p>
+        <p className="text-[14px] font-medium text-center">Marks</p>
       </div>
 
       {/* Rows */}
       <div className="mt-4 flex flex-col gap-4">
-        {formData.questionTypes.map(
-          (item, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-[1fr_120px_120px_40px] gap-5 items-center"
-            >
-              {/* Question Type */}
-              <input
-                value={item.type}
-                onChange={(e) =>
-                  updateQuestionType(
-                    index,
+  {formData.questionTypes.map((item, index) => (
+    <div key={index} className="flex flex-col md:grid md:grid-cols-[1fr_120px_120px_40px] gap-2 md:gap-5">
+      {/* Question Type */}
+      <input
+        value={item.type}
+        onChange={(e) => updateQuestionType(index, "type", e.target.value)}
+        placeholder="Question Type"
+        className="h-[48px] md:h-[54px] rounded-full border border-[#E8E8E8] bg-[#FAFAFA] px-5 outline-none text-[14px] md:text-[15px]"
+      />
 
-                    "type",
+      <div className="flex gap-2 md:contents">
+        {/* Questions */}
+        <div className="flex-1 md:flex-none h-[48px] md:h-[54px] rounded-full border border-[#E8E8E8] bg-[#FAFAFA] px-4 flex items-center justify-between">
+          <span className="text-[11px] text-[#999] md:hidden mr-1">Qs</span>
+          <button onClick={() => updateQuestionType(index, "numberOfQuestions", Math.max(1, item.numberOfQuestions - 1))}>
+            <Minus size={14} />
+          </button>
+          <span className="text-[14px]">{item.numberOfQuestions}</span>
+          <button onClick={() => updateQuestionType(index, "numberOfQuestions", item.numberOfQuestions + 1)}>
+            <Plus size={14} />
+          </button>
+        </div>
 
-                    e.target.value
-                  )
-                }
-                placeholder="Question Type"
-                className="h-[54px] rounded-full border border-[#E8E8E8] bg-[#FAFAFA] px-5 outline-none text-[15px]"
-              />
+        {/* Marks */}
+        <div className="flex-1 md:flex-none h-[48px] md:h-[54px] rounded-full border border-[#E8E8E8] bg-[#FAFAFA] px-4 flex items-center justify-between">
+          <span className="text-[11px] text-[#999] md:hidden mr-1">Marks</span>
+          <button onClick={() => updateQuestionType(index, "marks", Math.max(1, item.marks - 1))}>
+            <Minus size={14} />
+          </button>
+          <span className="text-[14px]">{item.marks}</span>
+          <button onClick={() => updateQuestionType(index, "marks", item.marks + 1)}>
+            <Plus size={14} />
+          </button>
+        </div>
 
-              {/* Questions */}
-              <div className="h-[54px] rounded-full border border-[#E8E8E8] bg-[#FAFAFA] px-4 flex items-center justify-between">
-                <button
-                  onClick={() =>
-                    updateQuestionType(
-                      index,
-
-                      "numberOfQuestions",
-
-                      Math.max(
-                        1,
-
-                        item.numberOfQuestions -
-                          1
-                      )
-                    )
-                  }
-                >
-                  <Minus size={16} />
-                </button>
-
-                <span>
-                  {item.numberOfQuestions}
-                </span>
-
-                <button
-                  onClick={() =>
-                    updateQuestionType(
-                      index,
-
-                      "numberOfQuestions",
-
-                      item.numberOfQuestions +
-                        1
-                    )
-                  }
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              {/* Marks */}
-              <div className="h-[54px] rounded-full border border-[#E8E8E8] bg-[#FAFAFA] px-4 flex items-center justify-between">
-                <button
-                  onClick={() =>
-                    updateQuestionType(
-                      index,
-
-                      "marks",
-
-                      Math.max(
-                        1,
-
-                        item.marks - 1
-                      )
-                    )
-                  }
-                >
-                  <Minus size={16} />
-                </button>
-
-                <span>{item.marks}</span>
-
-                <button
-                  onClick={() =>
-                    updateQuestionType(
-                      index,
-
-                      "marks",
-
-                      item.marks + 1
-                    )
-                  }
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              {/* Remove */}
-              <button
-                onClick={() =>
-                  removeQuestionType(index)
-                }
-              >
-                <X
-                  size={18}
-                  className="text-[#888]"
-                />
-              </button>
-            </div>
-          )
-        )}
+        {/* Remove */}
+        <button onClick={() => removeQuestionType(index)} className="w-10 flex items-center justify-center">
+          <X size={16} className="text-[#888]" />
+        </button>
       </div>
+    </div>
+  ))}
+</div>
 
       {/* Add */}
       <button
@@ -467,10 +382,10 @@ export default function AssignmentForm() {
       {/* Submit */}
       <button
   onClick={handleSubmit}
-  disabled={sendingtoqueue || submitted}
+  disabled={isSubmitting || submitted}
   className="mt-10 w-full h-[56px] rounded-full bg-[#171717] text-white text-[15px] font-medium hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-3"
 >
-  {sendingtoqueue ? (
+  {isSubmitting ? (
     <>
       <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
       <span>Sending to queue...</span>

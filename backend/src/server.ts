@@ -7,11 +7,15 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 
-app.use(cors({
-  origin: "https://ai-assessment-creator-1-w44e.onrender.com",
-  credentials: true
-}));
-
+app.use(
+  cors({
+    origin: [
+      "https://ai-assessment-creator-1-w44e.onrender.com",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/api", assessmentRoutes);
 

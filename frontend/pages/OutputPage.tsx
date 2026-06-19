@@ -38,7 +38,7 @@ const  OutputPage = () => {
   const sections = assignment?.generatedPaper?.sections
   return (
     <QuestionPaper
-      schoolName={assignment.schoolName || "Karan Public School"}
+      schoolName={assignment?.schoolName || "Karan Public School"}
       subject="Science"
       className="8th"
       timeAllowed="45 minutes"

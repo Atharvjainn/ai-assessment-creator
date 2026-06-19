@@ -5,15 +5,20 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { menuItems } from "@/utils/items";
 import { useUIStore } from "@/store/useUIStore";
+import { useUser } from "@clerk/nextjs";
 
 export default function Sidebar() {
   const router = useRouter();
   const { activeTab, setCurrentTab } = useUIStore();
+  const user = useUser();
 
   const handleNavigation = (tab: string, route: string) => {
     setCurrentTab(tab);
     router.push(route);
   };
+
+  const schoolName = user.user?.unsafeMetadata.schoolName as string
+  const address = user.user?.unsafeMetadata.address as string
 
   return (
     <div className="hidden md:flex w-[280px] lg:w-[330px] h-full bg-[#f5f5f5] rounded-2xl shadow-[0_32px_48px_rgba(0,0,0,0.20),0_16px_48px_rgba(0,0,0,0.12)] flex-col">
@@ -59,11 +64,11 @@ export default function Sidebar() {
             <span className="text-[14px]">Settings</span>
           </button>
 
-          <div className="mt-4 bg-[#E3E3E3] rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-[#CFCFCF] flex-shrink-0" />
-            <div className="min-w-0">
-              <h3 className="text-[15px] font-semibold text-[#2F2F2F] leading-none truncate">Delhi Public School</h3>
-              <p className="mt-1.5 text-[13px] text-[#6F6F6F] truncate">Bokaro Steel City</p>
+          <div className="mt-4 bg-[#E3E3E3] rounded-2xl p-3 flex items-center justify-center gap-3">
+            {/* <div className="w-11 h-11 rounded-full bg-[#CFCFCF] flex-shrink-0" /> */}
+            <div className="min-w-0 flex flex-col items-center  ">
+              <h3 className="text-lg font-semibold text-[#2F2F2F] leading-none truncate">{schoolName.toLocaleUpperCase()}</h3>
+              <p className="text-[13px] text-[#6F6F6F] truncate">{address.toLocaleUpperCase()}</p>
             </div>
           </div>
         </div>

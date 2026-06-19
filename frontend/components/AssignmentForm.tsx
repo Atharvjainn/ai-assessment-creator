@@ -16,6 +16,7 @@ import type { QuestionType, AssignmentFormData } from "../utils/types";
 import { useUIStore } from "@/store/useUIStore";
 import { uploadToCloudinary } from "@/utils/cloudinary";
 import { useAssessmentStore } from "@/store/useAssessmentStore";
+import { useUser } from "@clerk/nextjs";
 
 export default function AssignmentForm() {
   const router = useRouter();
@@ -136,6 +137,9 @@ export default function AssignmentForm() {
 
   const handleSubmit = async () => {
     if (!validate()) return;
+    const user = useUser();
+    const schoolName = user.user?.unsafeMetadata.schoolName;
+    const address = user.user?.unsafeMetadata.address;
 
     setIsSubmitting(true);
     try {
@@ -144,7 +148,7 @@ export default function AssignmentForm() {
         const upload = await uploadToCloudinary(file);
         payload = { ...formData, uploadedFileUrl: upload.url };
       }
-      await sendtoqueue(payload);
+      await sendtoqueue(payload,schoolName as string,address as string);
       setFormData(initialFormData);
       setFile(null);
       setSubmitted(true);

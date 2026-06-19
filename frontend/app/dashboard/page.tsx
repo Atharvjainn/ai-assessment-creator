@@ -12,7 +12,7 @@ const page = () => {
 
   return (
     <>
-      {assessments.length > 0 ? (
+      {assessments.length > 0 && assessmentsloading === false ? (
         <AllAssignmentPage />
       ) : (
         <EmptyAssignment />

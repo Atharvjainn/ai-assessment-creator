@@ -45,6 +45,8 @@ const assignmentSchema = new mongoose.Schema(
   {
     uploadedFileUrl: String,
     title : String,
+    schoolName : String,
+    address : String,
 
     dueDate: {
       type: Date,

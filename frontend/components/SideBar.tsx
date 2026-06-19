@@ -67,8 +67,8 @@ export default function Sidebar() {
           <div className="mt-4 bg-[#E3E3E3] rounded-2xl p-3 flex items-center justify-center gap-3">
             {/* <div className="w-11 h-11 rounded-full bg-[#CFCFCF] flex-shrink-0" /> */}
             <div className="min-w-0 flex flex-col items-center  ">
-              <h3 className="text-lg font-semibold text-[#2F2F2F] leading-none truncate">{schoolName.toLocaleUpperCase()}</h3>
-              <p className="text-[13px] text-[#6F6F6F] truncate">{address.toLocaleUpperCase()}</p>
+              <h3 className="text-lg font-semibold text-[#2F2F2F] leading-none truncate">{schoolName?.toLocaleUpperCase()}</h3>
+              <p className="text-[13px] text-[#6F6F6F] truncate">{address?.toLocaleUpperCase()}</p>
             </div>
           </div>
         </div>

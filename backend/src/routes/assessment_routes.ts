@@ -11,7 +11,7 @@ router.get('/check',(req,res) => {
 })
 
 router.post("/create-assessment",createAssessment)
-router.get('/get-assessments',getAllAssessments);
+router.post('/get-assessments',getAllAssessments);
 router.get('/get-assessment/:id',getAssessmentById);
 router.delete('/delete-assessment/:id', deleteAssessment)
 

@@ -12,7 +12,6 @@ const page = () => {
 
   useEffect(() => {
   if (!isLoaded || !user) return;
-
   setAssessments(user.id);
 }, [user, isLoaded]);
 

@@ -50,7 +50,7 @@ export const useAssessmentStore = create<AssessmentStore>((set, get) => ({
   setAssessments: async (id : string) => {
     set({ assessmentsloading: true });
     try {
-      const response = await axiosInstance.post('/api/get-assessments',id);
+      const response = await axiosInstance.post('/api/get-assessments',{userId : id});
       set({ assessments: response.data.data });
     } catch (error) {
       console.log("Cannot fetch assessments");

@@ -1,6 +1,6 @@
 'use client'
 import EmptyAssignment from '@/components/EmptyAssignment'
-import AllAssignmentPage from '@/pages/AllAssignmentPage'
+import AllAssignmentPage from '@/screens/AllAssignmentPage'
 import { useAssessmentStore } from '@/store/useAssessmentStore'
 import { useEffect } from 'react'
 

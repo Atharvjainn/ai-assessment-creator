@@ -1,5 +1,5 @@
 import React from 'react'
-import CreateAssignmentPage from '@/pages/CreateAssignmentPage'
+import CreateAssignmentPage from '@/screens/CreateAssignmentPage'
 
 const page = () => {
   return (

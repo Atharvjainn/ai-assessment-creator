@@ -47,7 +47,6 @@ const assignmentSchema = new mongoose.Schema(
     title : String,
     schoolName : String,
     address : String,
-    userId : String,
 
     dueDate: {
       type: Date,

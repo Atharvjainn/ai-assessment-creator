@@ -140,7 +140,7 @@ export default function AssignmentForm() {
     if (!validate()) return;
     const schoolName = user.user?.unsafeMetadata.schoolName;
     const address = user.user?.unsafeMetadata.address;
-    const userId = user.user?.id;
+    // const userId = user.user?.id;
 
     setIsSubmitting(true);
     try {
@@ -149,7 +149,7 @@ export default function AssignmentForm() {
         const upload = await uploadToCloudinary(file);
         payload = { ...formData, uploadedFileUrl: upload.url };
       }
-      await sendtoqueue(payload,schoolName as string,address as string,userId as string);
+      await sendtoqueue(payload,schoolName as string,address as string);
       setFormData(initialFormData);
       setFile(null);
       setSubmitted(true);

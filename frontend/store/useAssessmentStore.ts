@@ -14,7 +14,7 @@ type Assessment = {
 
 type AssessmentStore = {
   sendingtoqueue: boolean;
-  sendtoqueue: (data: AssignmentFormData, schoolName: string, address: string,userId : string) => void;
+  sendtoqueue: (data: AssignmentFormData, schoolName: string, address: string) => void;
   assessments: Assessment[];
   setAssessments: () => void;
   assessmentsloading: boolean;
@@ -29,10 +29,10 @@ type AssessmentStore = {
 export const useAssessmentStore = create<AssessmentStore>((set, get) => ({
   sendingtoqueue: false,
 
-  sendtoqueue: async (data: AssignmentFormData, schoolName: string, address: string,userId : string) => {
+  sendtoqueue: async (data: AssignmentFormData, schoolName: string, address: string) => {
     set({ sendingtoqueue: true })
     try {
-      await axiosInstance.post('/api/create-assessment', { ...data, schoolName, address,userId });
+      await axiosInstance.post('/api/create-assessment', { ...data, schoolName, address});
       toast.success('Assignment queued for generation!');
     } catch (error) {
       console.log("Cannot send request");

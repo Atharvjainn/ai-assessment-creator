@@ -28,7 +28,10 @@ export const createAssessment = async(req : Request,res : Response) => {
 
 export const getAllAssessments = async(req : Request,res : Response) => {
     try {
-        const assessments = await Assignment.find();
+        const id = req.body;
+        const assessments = await Assignment.find({
+            userId : id
+        });
         return res.status(200).json({
             data : assessments,
             success : true

@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { axiosInstance } from '../utils/axios'
 import type { AssignmentFormData } from '@/utils/types'
 import toast from 'react-hot-toast'
+import { useUser } from '@clerk/nextjs';
 
 
 type Assessment = {
@@ -12,11 +13,12 @@ type Assessment = {
   status: 'pending' | 'processing' | 'completed' | 'failed';
 };
 
+
 type AssessmentStore = {
   sendingtoqueue: boolean;
-  sendtoqueue: (data: AssignmentFormData, schoolName: string, address: string) => void;
+  sendtoqueue: (data: AssignmentFormData, schoolName: string, address: string,userId : string) => void;
   assessments: Assessment[];
-  setAssessments: () => void;
+  setAssessments: (id : string) => void;
   assessmentsloading: boolean;
   assignment: null | any;
   setAssignment: (id: string) => void;
@@ -29,10 +31,10 @@ type AssessmentStore = {
 export const useAssessmentStore = create<AssessmentStore>((set, get) => ({
   sendingtoqueue: false,
 
-  sendtoqueue: async (data: AssignmentFormData, schoolName: string, address: string) => {
+  sendtoqueue: async (data: AssignmentFormData, schoolName: string, address: string,userId : string) => {
     set({ sendingtoqueue: true })
     try {
-      await axiosInstance.post('/api/create-assessment', { ...data, schoolName, address});
+      await axiosInstance.post('/api/create-assessment', { ...data, schoolName, address,userId});
       toast.success('Assignment queued for generation!');
     } catch (error) {
       console.log("Cannot send request");
@@ -43,12 +45,12 @@ export const useAssessmentStore = create<AssessmentStore>((set, get) => ({
   },
 
   assessments: [],
-  assessmentsloading: false,
+  assessmentsloading: true,
 
-  setAssessments: async () => {
+  setAssessments: async (id : string) => {
     set({ assessmentsloading: true });
     try {
-      const response = await axiosInstance.get('/api/get-assessments');
+      const response = await axiosInstance.post('/api/get-assessments',id);
       set({ assessments: response.data.data });
     } catch (error) {
       console.log("Cannot fetch assessments");

@@ -28,9 +28,9 @@ export const createAssessment = async(req : Request,res : Response) => {
 
 export const getAllAssessments = async(req : Request,res : Response) => {
     try {
-        const {userID} = req.body;
+        const { userId } = req.body;
         const assessments = await Assignment.find({
-            userId : userID
+            userId : userId
         });
         return res.status(200).json({
             data : assessments,
